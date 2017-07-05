@@ -1,0 +1,205 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret home_elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Australia/Melbourne
+ 
+# Customizations
+  customize: !include includes/customize.yaml
+  customize_domain: {}
+  customize_glob: {}
+  
+# Enables the frontend
+frontend:
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: !secret api_password
+  base_url: !secret base_url
+
+panel_iframe:
+# Hass Configurator Panel
+  configurator:
+    title: Configurator
+    icon: mdi:wrench
+    url: !secret hassconfig_url
+  
+# Checks for available updates
+updater:
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time.
+history:
+
+# Add Configuration Panel
+#config:
+
+# View all events in a logbook
+logbook: !include includes/logbook.yaml
+
+# Track the sun
+sun:
+
+# Text to speech
+tts:
+  platform: google  
+  
+# Media Player
+media_player:
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
+    
+# Camera (Synology)
+camera:
+  - platform: synology
+    url: !secret synologycam_url
+    username: !secret synologycam_username
+    password: !secret synologycam_password
+    verify_ssl: False
+    timeout: 15
+#  - platform: onvif
+#    name: front_door
+#    host: !secret sensor_onvif_host1
+#    username: !secret sensor_onvif_username
+#    password: !secret sensor_onvif_password
+#    port: !secret sensor_onvif_port
+#  - platform: onvif
+#    name: back_deck
+#    host: !secret sensor_onvif_host2
+#    username: !secret sensor_onvif_username
+#    password: !secret sensor_onvif_password
+#    port: !secret sensor_onvif_port
+    
+# Microsoft Face - Testing
+#microsoft_face:
+#  api_key: !secret microsoftface_api
+
+# IFTTT Key
+ifttt:
+  key: !secret ifttt_api
+
+# iOS App
+ios:
+
+# Device Tracking
+# MQTT (Device Tracking)      
+mqtt:
+  broker: !secret mqtt_broker
+  port: !secret mqtt_port
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  
+#   Owntracks
+device_tracker:
+  - platform: owntracks
+#   Router Based Device Tracking
+  - platform: nmap_tracker
+    hosts: 192.168.1.1/24
+    exclude: 
+     - 192.168.1.105
+     - 192.168.1.100
+     
+#ZWave Devices
+zwave:
+  usb_path: /dev/ttyACM0
+#  polling_interval: 60000
+#  autoheal: true
+
+#   Notifications via HTML5
+notify:
+  - platform: html5
+    gcm_api_key: !secret html5_gcm_api
+    gcm_sender_id: !secret html5_gcm_sender
+    
+# Google Assistant Emulated Hue
+emulated_hue:
+    type: google_home
+    host_ip: !secret hassbian_ip
+#    Google Assistant only Supports Port 80 although it cannot be used due to docker setup.
+    listen_port: 80
+
+# Logitech Harmony Living Room
+remote:
+  - platform: harmony
+    name: !secret harmony_name
+    host: !secret harmony_ip
+
+############
+# Switches
+############
+switch 1:
+  - platform: broadlink
+    host: !secret broadlink_sw1_ip
+    mac: '34:EA:34:F5:E4:AC'
+    type: spmini2
+    friendly_name: 'Living Room Lamp'
+switch 2:
+  - platform: broadlink
+    host: !secret broadlink_sw2_ip
+    mac: '34:EA:34:F5:E4:B0'
+    type: spmini2
+    friendly_name: 'Bed Rachel Lamp'
+switch 3:
+  - platform: broadlink
+    host: !secret broadlink_sw3_ip
+    mac: '34:EA:34:F5:E1:18'
+    type: spmini2
+    friendly_name: 'Bed Trent Lamp'
+switch 4:
+  - platform: broadlink
+    host: !secret broadlink_sw4_ip
+    mac: '34:EA:34:F5:E4:F7'
+    type: spmini2
+    friendly_name: 'Outside Heater'
+
+############
+# Additional Zones
+############
+zone:
+  name: !secret zone_name
+  latitude: !secret zone_latitude
+  longitude: !secret zone_longitude
+  icon: mdi:server-network
+  radius: 200
+
+zone 2:
+  name: !secret zone2_name
+  latitude: !secret zone2_latitude
+  longitude: !secret zone2_longitude
+  icon: mdi:hospital-building
+  radius: 200
+  
+
+############
+# Includes
+############
+
+# Single Files
+
+input_boolean: !include includes/input_boolean.yaml
+input_select: !include includes/input_select.yaml
+input_slider: !include includes/input_slider.yaml
+weblink: !include includes/weblink.yaml
+binary_sensor: !include includes/binary_sensor.yaml
+group: !include includes/group.yaml
+sensor: !include includes/sensor.yaml
+script: !include includes/script.yaml
+#image_processing: !include includes/image_processing.yaml
+
+
+# Merge List
+
+automation: !include_dir_merge_list includes/automation
