@@ -1,0 +1,84 @@
+############################################################
+#
+# Home Assistant Customize
+# Icons from: https://materialdesignicons.com/
+############################################################
+
+media_player.living_room_home:
+  friendly_name: Living Room Home
+media_player.tv_ua55ju6400:
+  friendly_name: Living Room TV
+media_player.living_room:
+  friendly_name: Living Room Chromecast
+media_player.outside:
+  friendly_name: Outside Chromecast Audio
+media_player.bed_room:
+  friendly_name: Bed Room Chromecast
+sensor.harmony_activity:
+ icon: 'mdi:monitor'
+sensor.weather_minimum:
+ icon: 'mdi:thermometer'
+sensor.weather_maximum:
+ icon: 'mdi:thermometer'
+sensor.speedtest_download:
+ icon: 'mdi:speedometer'
+sensor.speedtest_upload:
+  icon: 'mdi:speedometer'
+sensor.speedtest_ping:
+  icon: 'mdi:speedometer'
+sensor.piuptime:
+  friendly_name: HASSBian Uptime
+  icon: 'mdi:clock-start'
+sensor.nzbget_speed:
+  friendly_name: Current NZBGet Speed
+  icon: 'mdi:download'
+sensor.xboxone:
+  icon: 'mdi:xbox'
+sensor.ps4:
+  icon: 'mdi:playstation'
+sensor.livingroomgooglehome:
+  icon: 'mdi:assistant'
+sensor.livingroomchromecast:
+  icon: 'mdi:cast'
+sensor.bedroomchromecast:
+  icon: 'mdi:cast'
+sensor.outsidechromecast:
+  icon: 'mdi:cast'
+sensor.livingroomtv:
+  icon: 'mdi:television'
+sensor.cpu_load_total:
+  friendly_name: CPU Usage
+sensor.memory_usage_real:
+  friendly_name: Memory Usage
+sensor.status_volume_2:
+  friendly_name: Volume 2 Status
+sensor.volume_used_volume_1:
+  friendly_name: Volume 1 Usage
+sensor.volume_used_volume_2:
+  friendly_name: Volume 2 Usage
+sensor.maximum_disk_temp_volume_2:
+  friendly_name: Volume 2 Temperature
+sensor.status_volume_1:
+  friendly_name: Volume 1 Status
+sensor.status_volume_3:
+  friendly_name: Volume 3 Status
+sensor.fibaro_system_fgms001zw5_motion_sensor_temperature:
+  friendly_name: Living Room Temperature
+  icon: mdi:thermometer
+sensor.fibaro_system_fgms001zw5_motion_sensor_luminance:
+  friendly_name: Living Room Luminance
+  icon: mdi:brightness-7
+sensor.fibaro_system_fgms001zw5_motion_sensor_seismic_intensity:
+  friendly_name: Living Room Seismic Intensity
+  icon: mdi:vibrate
+binary_sensor.motion:
+  friendly_name: Living Room Motion
+binary_sensor.tampering:
+  friendly_name: Sensor Tampering
+  icon: mdi:shield-outline
+script.good_night:
+  friendly_name: Good Night
+  icon: mdi:sleep
+# Hidden Items
+media_player._ua55ju6400_ua55ju6400:
+  hidden: true

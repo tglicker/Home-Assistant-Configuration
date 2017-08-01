@@ -1,0 +1,82 @@
+############################################################
+#
+# Home Assistant Input Selects
+#
+############################################################
+
+############################################################
+#
+# Home Assistant Radio Controls
+#
+############################################################
+
+radio_station:
+  name: Radio Station
+  options:
+    - Triple J
+    - Double J
+    - Nova 100
+    - SmoothFM
+    - SBS Chill
+    - "None"
+  initial: "None"
+  icon: mdi:radio
+radio_player:
+  name: Radio Player
+  options:
+    - Living Room Home
+    - Living Room Chromecast
+    - Bed Room Chromecast
+    - Outside Chromecast Audio
+    - "None"
+  initial: "None"
+  icon: mdi:cast
+  
+  
+############################################################
+#
+# Home Assistant Harmony Controls
+#
+############################################################
+
+harmony:
+  name: Harmony Control
+  options:
+    - Select Input
+    - Watch TV
+    - Watch Plex
+    - Watch Chromecast
+    - Play Retropie
+    - Play Wii U
+    - Power Off
+  icon: mdi:remote
+  
+############################################################
+#
+# Home Assistant Air Conditioner Control
+#
+############################################################
+
+ac_operation_mode:
+  name: Operating Mode
+  options:
+    - COOL
+    - FAN
+    - Power Off
+  initial: Power Off
+  icon: mdi:settings
+ac_fan_mode:
+  name: Fan Mode
+  options:
+    - AUTO
+    - LOW
+    - MED
+    - HIGH
+  initial: AUTO
+  icon: mdi:fan
+ac_swing_mode:
+  name: Swing Mode
+  options:
+   - TOP
+   - SWING
+  icon: mdi:arrow-expand

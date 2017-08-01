@@ -1,0 +1,744 @@
+  ############################################################
+  #
+  # Chromecast Radio Control
+  #
+  ############################################################
+  
+  ############################################################
+  #
+  # Stop Streaming Radio on Chromecast
+  #
+  ############################################################
+- id: chromecast_radio_stop
+  alias: STOP Streaming Radio on CHROMECAST
+  trigger:
+  - platform: state
+    entity_id: input_select.radio_station
+    to: "None"
+  action:
+  - service: media_player.turn_off
+    data_template:
+      entity_id: >
+          {% if is_state("input_select.radio_player", "Living Room Home") %}
+            media_player.living_room_home
+          {%-elif is_state("input_select.radio_player", "Living Room Chromecast") %}
+            media_player.living_room
+          {%-elif is_state("input_select.radio_player", "Bed Room Chromecast") %}
+            media_player.bed_room
+          {%-elif is_state("input_select.radio_player", "Outside Chromecast Audio") %}
+            media_player.outside
+          {% else %}
+            "None"
+          {% endif %}
+  ############################################################
+  #
+  # Start Streaming Radio on Chromecast
+  #
+  ############################################################
+- id: chromecast_radio_start
+  alias: START Streaming Radio on CHROMECAST
+  trigger:
+  - platform: state
+    entity_id: input_select.radio_station
+  action:
+  - service: media_player.play_media
+    data_template:
+      entity_id: >
+        {% if is_state("input_select.radio_player", "Living Room Home") %}
+          media_player.living_room_home
+        {%-elif is_state("input_select.radio_player", "Living Room Chromecast") %}
+          media_player.living_room
+        {%-elif is_state("input_select.radio_player", "Bed Room Chromecast") %}
+          media_player.bed_room
+        {%-elif is_state("input_select.radio_player", "Outside Chromecast Audio") %}
+          media_player.outside
+        {% else %}
+          "None"
+        {% endif %}
+      media_content_id: >
+        {% if is_state("input_select.radio_station", "Triple J") %}
+          http://live-radio01.mediahubaustralia.com/2TJW/aac/Triple J NSW.aac
+        {%-elif is_state("input_select.radio_station", "Double J") %}
+          http://live-radio01.mediahubaustralia.com/DJDW/aac/Double J NSW.aac
+        {%-elif is_state("input_select.radio_station", "Nova 100") %}
+          http://streaming.novaentertainment.com.au/nova100
+        {%-elif is_state("input_select.radio_station", "SmoothFM") %}
+          http://streaming.novaentertainment.com.au/smooth915 
+        {%-elif is_state("input_select.radio_station", "SBS Chill") %}
+          http://shoutcast.sbs.com.au/SBSChill
+        {% else %}
+          "None"
+        {% endif %}
+      media_content_type: 'audio/mp4'
+      
+  ############################################################
+  #
+  # Adjust Volume on Chromecast
+  #
+  ############################################################
+- id: chromecast_radio_volume
+  alias: change volume google
+  trigger:
+  - platform: state
+    entity_id: input_slider.google_volume
+  condition:
+  - condition: template
+    value_template: "{{ states.input_select.radio_player.state != 'OFF' }}"
+  action:
+  - service: media_player.volume_set
+    data_template:
+      entity_id: >
+        {% if is_state("input_select.radio_player", "Living Room Home") %}
+          media_player.living_room_home
+        {% elif is_state("input_select.radio_player", "Living Room Chromecast") %}
+          media_player.living_room
+        {% elif is_state("input_select.radio_player", "Bed Room Chromecast") %}
+          media_player.bedroomchromecast
+        {%-elif is_state("input_select.radio_player", "Outside Chromecast Audio") %}
+          media_player.outside
+        {% else %}
+          "None"
+        {% endif %}
+      volume_level: "{{ states.input_slider.google_volume.state | float / 10 }}"
+
+  ############################################################
+  #
+  # Fibaro MultiSensor.
+  #
+  ############################################################
+  
+  ############################################################
+  #
+  # Motion Sensor Turn on living_room_lamp
+  #
+  ############################################################
+- id: fibaro_multisensor_motion_lamp
+  alias: Auto Living Room Lamp
+  trigger:
+  - platform: state
+    entity_id: sensor.fibaro_system_fgms001zw5_motion_sensor_burglar
+    to: '8'
+  condition:
+  - condition: state
+    entity_id: input_boolean.disable_auto_living_room_lamp
+    state: 'off'
+  action:
+  - service: homeassistant.turn_on
+    entity_id: switch.living_room_lamp
+  
+    
+    
+  ############################################################
+  #
+  # Notification Actions
+  #
+  ############################################################
+  # Start Air Conditioner
+- id: push_start_airconditioner
+  alias: startac push notification action button clicked
+  trigger:
+  - platform: event
+    event_type: html5_notification.clicked
+    event_data:
+      action: startac
+  action:
+  - service: homeassistant.turn_on
+    entity_id: switch.living_room_lamp
+  
+  ############################################################
+  #
+  # Current Temperature Notification (Sends a notification and asks about starting the air conditioner)
+  #
+  ############################################################
+- id: current_temperature_notification
+  alias: Current Temperature Notification
+  trigger:
+  - platform: time
+    at: '17:00'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: input_boolean.disable_current_temperature_notification
+      state: 'off'
+    - condition: numeric_state
+      entity_id: 'sensor.fibaro_system_fgms001zw5_motion_sensor_temperature'
+      above: '23'
+    - condition: state
+      entity_id: device_tracker.androide14fdffea99b53a1
+      state: 'not_home'
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: device_tracker.trent_trent
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.trent_trent
+        state: '!secret work_state'
+  action:
+  - service: notify.html5_trent_galaxys8
+    data_template: 
+      title: "Home Temperature"
+      message: "Home is currently at {{ states.sensor.fibaro_system_fgms001zw5_motion_sensor_temperature.state }} °C."
+      data:
+        actions:
+        - action: open
+          title: Open Home Assistant
+          url: https://ha.stanvx.myds.me
+        - action: startac
+          title: Start AC
+  
+  ############################################################
+  #
+  # Burgular Notification (Unexpected motion whilst away)
+  #
+  ############################################################
+- id: unexpected_motion_notification
+  alias: Unexpected Motion Notification
+  trigger:
+  - platform: state
+    entity_id: sensor.fibaro_system_fgms001zw5_motion_sensor_burglar
+    to: '8'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: input_boolean.disable_unexpected_motion_notification
+      state: 'off'
+    - condition: state
+      entity_id: device_tracker.androide14fdffea99b53a1
+      state: 'not_home'
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: device_tracker.trent_trent
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.trent_trent
+        state: '!secret work_state'
+  action:
+  - service: notify.html5_trent_galaxys8
+    data_template:
+      message: "Unexpected Motion in Living Room Detected!"
+      
+  ############################################################
+  #
+  # Burgular Notification (Tampering)
+  #
+  ############################################################
+- id: Device_tampering_notification
+  alias: Device Tampering Notification
+  trigger:
+  - platform: state
+    entity_id: sensor.fibaro_system_fgms001zw5_motion_sensor_burglar
+    to: '3'
+  condition:
+  - condition: state
+    entity_id: input_boolean.disable_device_tampering_notification
+    state: 'off'
+  action:
+  - service: notify.html5_trent_galaxys8
+    data_template:
+      message: "Tampering of Living Room Sensor Detected!"
+
+  ############################################################
+  #
+  # Harmony Air Conditioner Control
+  #
+  ############################################################
+  
+  ############################################################
+  #
+  # Start Air Conditioner - Cool
+  #
+  ############################################################
+- id: ac_start_cool
+  alias: AC Start Cool
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: input_select.ac_operation_mode
+  - platform: state
+    entity_id: input_select.ac_fan_mode
+  - platform: state
+    entity_id: input_select.ac_swing_mode
+  - platform: state
+    entity_id: input_slider.ac_target_temp    
+  condition:
+  - condition: state
+    entity_id: input_select.ac_operation_mode
+    state: 'COOL'
+  action:
+  - service: remote.send_command
+    entity_id: remote.living_room
+    data_template:
+      device: "44392204"      
+      command: "{{ states.sensor.ac_setting_cool.state }}"
+  
+  ############################################################
+  #
+  # Start Air Conditioner - Fan
+  #
+  ############################################################
+- id: ac_start_fan
+  alias: AC Start Fan
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: input_select.ac_operation_mode
+  - platform: state
+    entity_id: input_select.ac_fan_mode
+  - platform: state
+    entity_id: input_select.ac_swing_mode
+  condition:
+  - condition: state
+    entity_id: input_select.ac_operation_mode
+    state: 'FAN'
+  action:
+  - service: remote.send_command
+    entity_id: remote.living_room
+    data_template:
+      device: "44392204"      
+      command: "{{ states.sensor.ac_setting_fan.state }}"
+  
+  ############################################################
+  #
+  # Stop Air Conditioner
+  #
+  ############################################################
+- id: ac_stop
+  alias: AC Stop
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: input_select.ac_operation_mode
+    to: 'Power Off'
+  action:
+  - service: remote.send_command
+    entity_id: remote.living_room
+    data_template:
+      device: "44392204"
+      command: "PowerOff"
+
+  ############################################################
+  #
+  # Harmony Remote Control
+  #
+  ############################################################
+  
+  ############################################################
+  #
+  # Start Activity
+  #
+  ############################################################
+- id: harmony_control_start
+  alias: Harmony
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: input_select.harmony
+    from: 'Select Input'
+  action:
+  - service: remote.turn_on
+    entity_id: remote.living_room
+    data_template:
+      activity: >
+        {% if is_state("input_select.harmony", "Watch TV") %}
+          26109474
+        {% elif is_state("input_select.harmony", "Watch Plex") %}
+          26117754
+        {% elif is_state("input_select.harmony", "Watch Chromecast") %}
+          26118358
+        {% elif is_state("input_select.harmony", "Play Retropie") %}
+          26286901
+        {% elif is_state("input_select.harmony", "Play Wii U") %}
+          26287096
+        {% else %}
+        {% endif %}
+  - service: input_select.select_option
+    entity_id: input_select.harmony
+    data_template:
+      option: "Select Input"
+  
+  ############################################################
+  #
+  # Stop Activity
+  #
+  ############################################################
+- id: harmony_control_stop
+  alias: Harmony Off
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: input_select.harmony
+    to: 'Power Off'
+  action:
+  - service: remote.turn_off
+    entity_id: remote.living_room
+  - service: input_select.select_option
+    entity_id: input_select.harmony
+    data_template:
+      option: "Select Input"
+
+  ############################################################
+  #
+  # Hide Media Players when not being used.
+  #
+  ############################################################
+  
+  ############################################################
+  #
+  # Media Player Living Room Home
+  #
+  ############################################################
+  
+  # Hide Media Player
+- id: hide_mediaplayer_living_room_home
+  alias: 'Hide media_player.living_room_home while not playing'
+  hide_entity: true
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: media_player.living_room_home
+    to: 'idle'
+  - platform: state
+    entity_id: media_player.living_room_home
+    to: 'off'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_living_room_home
+    data:
+      visible: False
+  # Show Media Player
+- id: show_mediaplayer_living_room_home
+  alias: 'Show media_player.office while playing'
+  hide_entity: true
+  trigger:
+  - platform: state
+    entity_id: media_player.living_room_home
+    to: 'playing'
+  - platform: state
+    entity_id: media_player.living_room_home
+    to: 'paused'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_living_room_home
+    data:
+      visible: True
+  ############################################################
+  #
+  # Media Player Living Room TV
+  #
+  ############################################################
+  
+  # Hide Media Player
+- id: hide_mediaplayer_tv_ua55ju6400
+  alias: 'Hide media_player.tv_ua55ju6400 while not playing'
+  hide_entity: true
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: media_player.tv_ua55ju6400
+    to: 'idle'
+  - platform: state
+    entity_id: media_player.tv_ua55ju6400
+    to: 'off'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_living_room_tv
+    data:
+      visible: False
+  # Show Media Player
+- id: show_mediaplayer_tv_ua55ju6400
+  alias: 'Show media_player.tv_ua55ju6400 while playing'
+  hide_entity: true
+  trigger:
+  - platform: state
+    entity_id: media_player.tv_ua55ju6400
+    to: 'playing'
+  - platform: state
+    entity_id: media_player.tv_ua55ju6400
+    to: 'paused'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_living_room_tv
+    data:
+      visible: True
+  ############################################################
+  #
+  # Media Player Living Room
+  #
+  ############################################################
+  
+  # Hide Media Player
+- id: hide_mediaplayer_living_room
+  alias: 'Hide media_player.living_room while not playing'
+  hide_entity: true
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: media_player.living_room
+    to: 'idle'
+  - platform: state
+    entity_id: media_player.living_room
+    to: 'off'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_living_room
+    data:
+      visible: False
+  # Show Media Player
+- id: show_mediaplayer_living_room
+  alias: 'Show media_player.living_room while playing'
+  hide_entity: true
+  trigger:
+  - platform: state
+    entity_id: media_player.living_room
+    to: 'playing'
+  - platform: state
+    entity_id: media_player.living_room
+    to: 'paused'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_living_room
+    data:
+      visible: True
+  ############################################################
+  #
+  # Media Player Bed Room
+  #
+  ############################################################
+  
+  # Hide Media Player
+- id: hide_mediaplayer_bed_room
+  alias: 'Hide media_player.bed_room while not playing'
+  hide_entity: true
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: media_player.bed_room
+    to: 'idle'
+  - platform: state
+    entity_id: media_player.bed_room
+    to: 'off'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_bed_room
+    data:
+      visible: False
+  # Show Media Player
+- id: show_mediaplayer_bed_room
+  alias: 'Show media_player.bed_room while playing'
+  hide_entity: true
+  trigger:
+  - platform: state
+    entity_id: media_player.bed_room
+    to: 'playing'
+  - platform: state
+    entity_id: media_player.bed_room
+    to: 'paused'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_bed_room
+    data:
+      visible: True
+  ############################################################
+  #
+  # Media Player Outside
+  #
+  ############################################################
+  
+  # Hide Media Player
+- id: hide_mediaplayer_outside
+  alias: 'Hide media_player.outside while not playing'
+  hide_entity: true
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: media_player.outside
+    to: 'idle'
+  - platform: state
+    entity_id: media_player.outside
+    to: 'off'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_outside
+    data:
+      visible: False
+  # Show Media Player
+- id: show_mediaplayer_outside
+  alias: 'Show media_player.outside while playing'
+  hide_entity: true
+  trigger:
+  - platform: state
+    entity_id: media_player.outside
+    to: 'playing'
+  - platform: state
+    entity_id: media_player.outside
+    to: 'paused'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_outside
+    data:
+      visible: True
+  ############################################################
+  #
+  # Media Player Spotify
+  #
+  ############################################################
+  
+  # Hide Media Player
+- id: hide_mediaplayer_spotify
+  alias: 'Hide media_player.spotify while not playing'
+  hide_entity: true
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: media_player.spotify
+    to: 'idle'
+  - platform: state
+    entity_id: media_player.spotify
+    to: 'off'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_spotify
+    data:
+      visible: False
+  # Show Media Player
+- id: show_mediaplayer_spotify
+  alias: 'Show media_player.spotify while playing'
+  hide_entity: true
+  trigger:
+  - platform: state
+    entity_id: media_player.spotify
+    to: 'playing'
+  - platform: state
+    entity_id: media_player.spotify
+    to: 'paused'
+  action:
+  - service: group.set_visibility
+    entity_id: group.media_spotify
+    data:
+      visible: True
+
+  ############################################################
+  #
+  # Automation ifttt
+  #
+  ############################################################
+  
+  ############################################################
+  #
+  # Office Lamp - Device Controll on/off
+  #
+  ############################################################
+- id: office_lamp_ifttt
+  alias: Turn Office Lamp on/off
+  trigger:
+  - platform: state
+    entity_id: input_boolean.ifttt_office_lamp
+  action:
+  - service: ifttt.trigger
+    data_template:
+      event: "{% if trigger.to_state.state == 'on' %}officelamp_on{% else %}officelamp_off{% endif %}"
+      value1: "{{ trigger.to_state.state }}"
+  
+  
+  ############################################################
+  #
+  # Media Light Control
+  #
+  # Currently just used for testing to make way for bigger and better things in future.
+  ############################################################
+  
+  ############################################################
+  #
+  # Turn off Lamp When Media Playing
+  #
+  ############################################################
+- id: media_lightcontrol_playing
+  alias: Media player playing
+  trigger:
+  - platform: state
+    entity_id: media_player.tv_ua55ju6400
+    to: 'playing'
+  #      from: 'idle'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      - condition: state
+        entity_id: input_boolean.disable_media_player_light_control
+        state: 'off'
+  action:
+  - service: homeassistant.turn_off
+    entity_id: switch.living_room_lamp
+  
+  ############################################################
+  #
+  # Turn on Lamp When Media Paused / Stopped
+  #
+  ############################################################
+- id: media_lightcontrol_stopped
+  alias: Media player stopped
+  trigger:
+  - platform: state
+    entity_id: media_player.tv_ua55ju6400
+    to: 'paused'
+  #    from: 'idle'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: input_boolean.disable_media_player_light_control
+      state: 'off'
+  action:
+  - service: homeassistant.turn_on
+    entity_id: switch.living_room_lamp
+
+  ############################################################
+  #
+  # Home Assistant Weather Notification
+  #
+  ############################################################
+- id: weather_morning_notfication
+  alias: 'Send notification when sun rises'
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: '+00:30:00'
+  condition:
+  - condition: state
+    entity_id: input_boolean.disable_morning_notification
+    state: 'off'
+  action:
+  - service: notify.html5_trent_galaxys8
+    data:
+      message: "Good morning! Forecast: {{ states('sensor.melbourne_summary') }}, temp {{ states('sensor.weather_min') }} - {{ states('sensor.weather_max') }}°c  {{ states('sensor.melbourne_uv_forecast') }} Next line: {{ states('sensor.melbourne_forecast_line3') }} Now: {{ states('sensor.owm_temperature') }}°c {{ states('sensor.owm_condition') }}, {{ states('sensor.owm_rain') }}"  
+
+- id: weather_night_notfication
+  alias: 'Send notification when sun sets'
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: '+00:00:00'
+  condition:
+  - condition: state
+    entity_id: input_boolean.disable_afternoon_notification
+    state: 'off'
+  action:
+  - service: notify.html5_trent_galaxys8
+    data:
+      message: "The sun has set. Forecast: {{ states('sensor.melbourne_summary') }}, temp {{ states('sensor.weather_min') }} - {{ states('sensor.weather_max') }}°c  Now: {{ states('sensor.owm_temperature') }}°c {{ states('sensor.owm_condition') }}, {{ states('sensor.owm_rain') }}"
+  

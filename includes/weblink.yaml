@@ -1,0 +1,25 @@
+############################################################
+#
+# Home Assistant Input Selects
+#
+############################################################
+
+entities:
+  - name: Router
+    url: !secret router_url
+    icon: mdi:router-wireless
+  - name: Synology
+    url: !secret synology_url
+    icon: mdi:network
+  - name: Surveillance Station
+    url: !secret surveillancestation_url
+    icon: mdi:video
+  - name: NZB Get
+    url: !secret nzbget_url
+    icon: mdi:download
+  - name: Sonarr
+    url: !secret sonarr_url
+    icon: mdi:television-guide
+  - name: Radarr
+    url: !secret radarr_url
+    icon: mdi:movie

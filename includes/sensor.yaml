@@ -1,0 +1,160 @@
+############################################################
+#
+# Sensor
+#
+############################################################
+
+# Dark Sky Weather
+- platform: darksky
+  api_key: !secret darksky_api
+  name: Weather
+  monitored_conditions:
+    - summary
+    - icon
+#    - nearest_storm_distance
+#    - nearest_storm_bearing
+#    - precip_type
+    - precip_intensity
+#    - precip_probability
+    - temperature
+#    - apparent_temperature
+#    - dew_point
+#    - wind_speed
+#    - wind_bearing
+#    - cloud_cover
+    - humidity
+#    - pressure
+#    - visibility
+#    - ozone
+    - minutely_summary
+#    - hourly_summary
+    - daily_summary
+    - temperature_max
+    - temperature_min
+#    - apparent_temperature_max
+#    - apparent_temperature_min
+#    - precip_intensity_max
+# Uptime
+- platform: command_line
+  name: piuptime
+  command: uptime | sed 's/.*up \([^,]*\), .*/\1/'
+
+# Current Time and Date
+- platform: time_date
+  display_options:
+    - 'time'
+    - 'date'
+
+# Speedtest
+- platform: speedtest
+  minute: 30
+  hour:
+    - 0
+    - 12
+  monitored_conditions:
+    - ping
+    - download
+    - upload
+# NZBGet Monitoring
+- platform: nzbget
+  host: !secret nzbget_ipaddress
+  username: !secret nzbget_username
+  password: !secret nzbget_password
+  monitored_variables:
+    - download_rate
+    - download_paused
+# Synology
+- platform: synologydsm
+  host: !secret sensor_synology_host
+  username: !secret sensor_synology_username
+  password: !secret sensor_synology_password
+  monitored_conditions:
+    - cpu_total_load
+    - memory_real_usage
+    - disk_status
+    - volume_status
+    - volume_percentage_used
+    - volume_disk_temp_max
+# Device Tracking + Activity Templates
+- platform: template
+  sensors:
+    ac_setting_cool:
+      friendly_name: 'Current AC Cool Setting'
+      value_template: '{{ states.input_slider.ac_target_temp.state | int }}-{{ states.input_select.ac_fan_mode.state }}-{{ states.input_select.ac_swing_mode.state }}'
+    ac_setting_fan:
+      friendly_name: 'Current AC Fan Setting'
+      value_template: 'FAN-{{ states.input_select.ac_fan_mode.state }}-{{ states.input_select.ac_swing_mode.state }}' 
+    ac_target:
+      friendly_name: 'Target Temperature'
+      value_template: '{{ states.input_slider.ac_target_temp.state | int }}'
+      unit_of_measurement: '°C'
+    harmony_activity:
+      friendly_name: 'Harmony Activity'
+      value_template: '{{ states.remote.living_room.attributes.current_activity }}'
+    xboxone:
+      friendly_name: 'Xbox One'
+      value_template: "{{ 'Online' if is_state('device_tracker.281878ebb599', 'home') else 'Offline' }}"
+    ps4:
+      friendly_name: 'Playstation 4'
+      value_template: "{{ 'Online' if is_state('device_tracker.ac899510c96d', 'home') else 'Offline' }}"
+    livingroomgooglehome:
+      friendly_name: 'Living Room Google Home'
+      value_template: "{{ 'Online' if is_state('device_tracker.f4f5d8dc6f8e', 'home') else 'Offline' }}"
+    livingroomchromecast:
+      friendly_name: 'Living Room Chromecast'
+      value_template: "{{ 'Online' if is_state('device_tracker.a477337ee656', 'home') else 'Offline' }}"
+    bedroomchromecast:
+      friendly_name: 'Bed Room Chromecast'
+      value_template: "{{ 'Online' if is_state('device_tracker.80d21d2c642a', 'home') else 'Offline' }}" 
+    outsidechromecast:
+      friendly_name: 'Outside Chromecast Audio'
+      value_template: "{{ 'Online' if is_state('device_tracker.546009dca412', 'home') else 'Offline' }}"
+    livingroomtv:
+      friendly_name: 'Living Room TV'
+      value_template: "{{ 'Online' if is_state('device_tracker.f8042e789976', 'home') else 'Offline' }}"
+# API Stream Sensor
+- platform: api_streams 
+
+# Scrape sensor for BOM weather forecasts
+- platform: scrape
+  resource: http://www.bom.gov.au/vic/forecasts/melbourne.shtml
+  name: Weather Maximum
+  select: '.max'
+  unit_of_measurement: '°C Max'
+    
+- platform: scrape
+  resource: http://www.bom.gov.au/vic/forecasts/melbourne.shtml
+  name: Weather Minimum
+  select: '.min'
+  unit_of_measurement: '°C Min'
+
+- platform: scrape
+  resource: http://www.bom.gov.au/vic/forecasts/melbourne.shtml
+  name: Melbourne summary
+  select: 'p:nth-of-type(4)'
+  # unit_of_measurement: 'Nil'
+   
+- platform: scrape
+  resource: http://www.bom.gov.au/vic/forecasts/melbourne.shtml
+  name: Melbourne UV forecast
+  select: 'p:nth-of-type(5)'
+  # unit_of_measurement: 'Nil'
+
+    
+- platform: scrape
+  resource: http://www.bom.gov.au/vic/forecasts/melbourne.shtml
+  name: Melbourne forecast line3
+  select: 'p:nth-of-type(6)'
+  # unit_of_measurement: 'Nil'
+
+- platform: openweathermap 
+  api_key: !secret openweathermap_api
+  forecast: 0
+  monitored_conditions:
+    - weather
+    - temperature
+    - wind_speed
+    - humidity
+    - pressure
+    - clouds
+    - rain  

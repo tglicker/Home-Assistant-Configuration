@@ -1,0 +1,26 @@
+############################################################
+#
+# Home Assistant Log Book
+#
+############################################################
+
+include:
+  entities:
+    - device_tracker.trent_trent
+    - device_tracker.androide14fdffea99b53a1
+    - sensor.speedtest_ping
+    - sensor.speedtest_download
+    - sensor.speedtest_upload
+    - sensor.nzbget_speed
+    - sensor.livingroomtv
+    - sensor.livingroomchromecast
+    - sensor.bedroomchromecast
+    - sensor.outsidechromecast
+    - sensor.xboxone
+    - sensor.ps4
+    - sensor.weather_summary
+    - sensor.weather_temperature
+    - sensor.weather_precip_intensity
+    - sensor.weather_humidity
+  domains:
+    - sun

@@ -1,0 +1,176 @@
+############################################################
+#
+# Home Assistant Group
+#
+############################################################
+
+default_view:
+  view: yes
+  name: Home
+  icon: mdi:home
+  entities:
+    - group.weather
+    - group.media_living_room_home
+    - group.media_living_room_tv
+    - group.media_living_room
+    - group.media_bed_room
+    - group.media_outside
+    - group.media_spotify
+    - group.harmony
+    - group.radio
+    - group.family
+    - group.scripts
+doors_view:
+  view: yes
+  icon: mdi:security-home
+  entities:
+    - group.cameras
+lights_view:
+  view: yes
+  icon: mdi:lightbulb
+  entities:
+    - group.lamps
+info_view:
+  view: yes
+  icon: mdi:settings
+  entities:
+    - group.infolinks
+    - group.network
+    - group.synology
+    - group.automation_override
+    - group.multisensor
+    - group.airconditioner
+# Groups
+weather:
+  name: Weather
+  entities:
+#    - sensor.weather_summary
+    - sun.sun
+    - sensor.weather_summary
+    - sensor.weather_temperature
+    - sensor.weather_minimum
+    - sensor.weather_maximum
+    - sensor.weather_precip_intensity
+    - sensor.weather_humidity
+media_living_room_home:
+  name: Media Living Room Home
+  entities:
+    - media_player.living_room_home
+media_living_room_tv:
+  name: Media Living TV
+  entities:
+    - media_player.tv_ua55ju6400
+media_living_room:
+  name: Media Living Room
+  entities:
+    - media_player.living_room
+media_bed_room:
+  name: Media Bed Room
+  entities:
+    - media_player.bed_room
+media_outside:
+  name: Media Outside
+  entities:
+    - media_player.outside
+media_spotify:
+  name: Media Spotify
+  entities:
+    - media_player.spotify
+harmony:
+  name: Harmony Remote
+  entities:
+    - sensor.harmony_activity
+    - input_select.harmony
+radio:
+  name: Radio
+  entities:
+    - input_select.radio_player
+    - input_select.radio_station
+    - input_slider.google_volume
+airconditioner:
+  name: AC Split System
+  entities:
+    - input_select.ac_operation_mode
+    - input_select.ac_fan_mode
+    - input_select.ac_swing_mode
+    - input_slider.ac_target_temp
+    - sensor.ac_target
+    - sensor.fibaro_system_fgms001zw5_motion_sensor_temperature
+family:
+  name: Family
+  entities:
+    - device_tracker.trent_trent
+    - device_tracker.2c8a72bbc83c
+scripts:
+  name: Scripts
+  entities:
+    - script.good_night
+cameras:
+  name: Cameras
+  entities:
+    - camera.front_door
+    - camera.back_deck
+lamps:
+  name: Lamps
+  entities:
+    - switch.living_room_lamp
+    - switch.bed_rachel_lamp
+    - switch.bed_trent_lamp
+    - switch.outside_heater
+    - input_boolean.ifttt_office_lamp
+infolinks:
+  name: Links
+  entities:
+    - weblink.router
+    - weblink.synology
+    - weblink.surveillance_station
+    - weblink.nzb_get
+    - weblink.sonarr
+    - weblink.radarr
+network:
+  name: Network
+  entities:
+    - sensor.speedtest_ping
+    - sensor.speedtest_download
+    - sensor.speedtest_upload
+    - sensor.nzbget_speed
+    - sensor.piuptime
+    - sensor.livingroomgooglehome
+    - sensor.livingroomtv
+    - sensor.livingroomchromecast
+    - sensor.bedroomchromecast
+    - sensor.outsidechromecast
+    - sensor.xboxone
+    - sensor.ps4
+synology:
+  name: "Synology"
+  entities:
+    - sensor.cpu_load_total
+    - sensor.memory_usage_real
+    - sensor.status_volume_1
+    - sensor.volume_used_volume_1
+    - sensor.status_volume_2
+    - sensor.volume_used_volume_2
+    - sensor.maximum_disk_temp_volume_2
+    - sensor.status_volume_3
+automation_override:
+  name: Automation Override
+  entities:
+    - input_boolean.disable_auto_living_room_lamp
+    - input_boolean.disable_media_player_light_control
+    - input_boolean.disable_current_temperature_notification
+    - input_boolean.disable_morning_notification
+    - input_boolean.disable_afternoon_notification
+    - input_boolean.disable_unexpected_motion_notification
+    - input_boolean.disable_device_tampering_notification
+multisensor:
+  name: Multisensor
+  entities:
+    - sensor.fibaro_system_fgms001zw5_motion_sensor_temperature
+#    - sensor.fibaro_system_fgms001zw5_motion_sensor_sourcenodeid
+    - sensor.fibaro_system_fgms001zw5_motion_sensor_luminance
+    - sensor.fibaro_system_fgms001zw5_motion_sensor_seismic_intensity
+#    - sensor.fibaro_system_fgms001zw5_motion_sensor_general
+#    - sensor.fibaro_system_fgms001zw5_motion_sensor_burglar
+    - binary_sensor.motion
+    - binary_sensor.tampering

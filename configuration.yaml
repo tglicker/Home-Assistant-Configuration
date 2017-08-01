@@ -30,6 +30,14 @@ panel_iframe:
     title: Configurator
     icon: mdi:wrench
     url: !secret hassconfig_url
+
+panel_custom: 
+# Floorplan Panel
+  - name: floorplan
+    sidebar_title: Floorplan
+    sidebar_icon: mdi:home
+    url_path: floorplan
+    config: !include floorplan.yaml
   
 # Checks for available updates
 updater:
@@ -189,6 +197,8 @@ zone 2:
 
 # Single Files
 
+automation: !include automations.yaml
+apiai: !include includes/apiai.yaml
 input_boolean: !include includes/input_boolean.yaml
 input_select: !include includes/input_select.yaml
 input_slider: !include includes/input_slider.yaml
@@ -202,4 +212,5 @@ script: !include includes/script.yaml
 
 # Merge List
 
-automation: !include_dir_merge_list includes/automation
+# Old Automation
+#automation: !include_dir_merge_list includes/automation

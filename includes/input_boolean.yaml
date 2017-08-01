@@ -1,0 +1,51 @@
+############################################################
+#
+# Home Assistant Input Boolean
+#
+############################################################
+
+############################################################
+#
+# Home Assistant Automation Override
+#
+############################################################
+
+disable_auto_living_room_lamp:
+  name: Disable Auto Living Room Lamp
+  initial: on
+  icon: mdi:lightbulb-outline
+disable_current_temperature_notification:
+  name: Disable Current Temperature Notification
+  initial: off
+  icon: mdi:thermometer
+disable_morning_notification:
+  name: Disable Morning Notification
+  initial: off
+  icon: mdi:weather-sunset-up
+disable_afternoon_notification:
+  name: Disable Afternoon Notification
+  initial: off
+  icon: mdi:weather-sunset-down
+disable_unexpected_motion_notification:
+  name: Disable Unexpected Motion Notification
+  initial: off
+  icon: mdi:shield-outline
+disable_device_tampering_notification:
+  name: Disable Device Tampering Notification
+  initial: off
+  icon: mdi:shield-outline
+disable_media_player_light_control:
+  name: Disable Media Player Light Control
+  initial: off
+  icon: mdi:play-pause
+  
+############################################################
+#
+# Home Assistant IFTTT Switch
+#
+############################################################
+
+ifttt_office_lamp:
+  name: Office Lamp
+  initial: off
+  icon: mdi:flash

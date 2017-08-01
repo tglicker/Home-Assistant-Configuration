@@ -1,0 +1,30 @@
+############################################################
+#
+# Home Assistant Scripts
+#
+############################################################
+
+#Turn off devices
+good_night:
+  sequence:
+    - service: switch.turn_off
+      data:
+        entity_id: group.lamps
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.ifttt_office_lamp
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.living_room_home
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.living_room
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.bed_room       
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.outside
+    
+        
+# Will add notification if devices are online (IE PC)
