@@ -69,7 +69,7 @@
             '
         - name: Text Sensors
           entities:
-             - device_tracker.trent_trent
+             - device_tracker.hauser_trent
              - device_tracker.2c8a72bbc83c
              - sensor.time
              - sensor.date
@@ -81,6 +81,7 @@
              - switch.bed_rachel_lamp
              - switch.outside_heater
              - input_boolean.ifttt_office_lamp
+             - light.entryway
           states:
             - state: 'on'
               class: 'switch-on'

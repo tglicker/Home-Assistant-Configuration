@@ -3,7 +3,11 @@
 *.csr
 *.crt
 *.key
+*.pem
+*.old
+location.txt
 www
+mqttssl
 OZW_Log.txt
 home-assistant.log
 home-assistant_v2.db

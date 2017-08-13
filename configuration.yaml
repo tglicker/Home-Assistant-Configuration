@@ -103,15 +103,22 @@ ifttt:
 ios:
 
 # Device Tracking
-# MQTT (Device Tracking)      
+# MQTT (Local Broker)     
 mqtt:
-  broker: !secret mqtt_broker
-  port: !secret mqtt_port
-  username: !secret mqtt_username
-  password: !secret mqtt_password
+  broker: !secret local_mqtt_broker
+  port: !secret local_mqtt_port
+  username: !secret local_mqtt_username
+  password: !secret local_mqtt_password
+  
+#  broker: !secret cloud_mqtt_broker
+#  port: !secret cloud_mqtt_port
+#  username: !secret cloud_mqtt_username
+#  password: !secret cloud_mqtt_password
+
   
 #   Owntracks
 device_tracker:
+#   Owntracks
   - platform: owntracks
 #   Router Based Device Tracking
   - platform: nmap_tracker
@@ -134,11 +141,13 @@ notify:
     
 # Google Assistant Emulated Hue
 emulated_hue:
-    type: google_home
     host_ip: !secret hassbian_ip
 #    Google Assistant only Supports Port 80 although it cannot be used due to docker setup.
     listen_port: 80
-
+    expose_by_default: true
+    exposed_domains:
+      - light
+      - switch
 # Logitech Harmony Living Room
 remote:
   - platform: harmony
@@ -189,7 +198,6 @@ zone 2:
   longitude: !secret zone2_longitude
   icon: mdi:hospital-building
   radius: 200
-  
 
 ############
 # Includes
@@ -198,10 +206,11 @@ zone 2:
 # Single Files
 
 automation: !include automations.yaml
-apiai: !include includes/apiai.yaml
+#apiai: !include includes/apiai.yaml
 input_boolean: !include includes/input_boolean.yaml
 input_select: !include includes/input_select.yaml
 input_slider: !include includes/input_slider.yaml
+light: !include includes/light.yaml
 weblink: !include includes/weblink.yaml
 binary_sensor: !include includes/binary_sensor.yaml
 group: !include includes/group.yaml

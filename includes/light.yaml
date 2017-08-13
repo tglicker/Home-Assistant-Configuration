@@ -1,0 +1,27 @@
+############################################################
+#
+# Home Assistant Group
+#
+############################################################
+
+# MILIGHT LED MQTT
+# Commands:  milight/commands/:device_id/:device_type/:group_id
+# Updates: milight/commands/:device_id/:device_type/:group_id
+- platform: mqtt_json
+  name: "Entryway"
+  command_topic: milight/commands/0x11/rgb_cct/1
+  state_topic: milight/updates/0x11/rgb_cct/1
+  color_temp: true
+  rgb: true
+  brightness: true
+  #optimistic: false
+
+# Limitless LED UDP Platform
+#platform: limitlessled
+#bridges:
+#  - host: 192.168.1.39
+#    port: 11
+#    groups:
+#    - number: 1
+#      name: Entry
+#      type: rgbww

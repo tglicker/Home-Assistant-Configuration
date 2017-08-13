@@ -99,7 +99,7 @@ airconditioner:
 family:
   name: Family
   entities:
-    - device_tracker.trent_trent
+    - device_tracker.hauser_trent
     - device_tracker.2c8a72bbc83c
 scripts:
   name: Scripts
@@ -113,6 +113,7 @@ cameras:
 lamps:
   name: Lamps
   entities:
+    - light.entryway
     - switch.living_room_lamp
     - switch.bed_rachel_lamp
     - switch.bed_trent_lamp

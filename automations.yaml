@@ -741,4 +741,16 @@
   - service: notify.html5_trent_galaxys8
     data:
       message: "The sun has set. Forecast: {{ states('sensor.melbourne_summary') }}, temp {{ states('sensor.weather_min') }} - {{ states('sensor.weather_max') }}°c  Now: {{ states('sensor.owm_temperature') }}°c {{ states('sensor.owm_condition') }}, {{ states('sensor.owm_rain') }}"
-  
+
+- id: MiLight_remote_forwarder
+  alias: MiLight Remote Forwarder
+  initial_state: True
+  trigger:
+  - platform: mqtt
+    topic: milight/updates/0x21/rgb_cct/+
+  action:
+  - service: mqtt.publish
+    data_template:
+      topic: "milight/commands/0x11/rgb_cct/{{ trigger.topic.split('/')[4] }}"
+      payload_template: >
+        {{ trigger.payload }}
