@@ -1,0 +1,41 @@
+############################################################
+#
+# HASS Theme Control
+# 
+############################################################
+  
+  
+############################################################
+#
+# Set Day Mode Theme
+#
+############################################################
+
+- alias: Set Day Mode Theme after Sunrise
+  initial_state: 'off'
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: '+00:30:00'
+  action:
+  - service: frontend.set_theme
+    data:
+      name: default
+
+############################################################
+#
+# Set Night Mode Theme
+#
+############################################################
+
+- alias: Set Night Mode Theme after Sunset
+  initial_state: 'off'
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: '+00:00:00'
+  action:
+  - service: frontend.set_theme
+    data:
+      name: darkblue
+      

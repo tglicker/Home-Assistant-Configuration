@@ -164,6 +164,7 @@ automation_override:
     - input_boolean.disable_afternoon_notification
     - input_boolean.disable_unexpected_motion_notification
     - input_boolean.disable_device_tampering_notification
+    - input_boolean.disable_entryway_light_trent_home
 multisensor:
   name: Multisensor
   entities:

@@ -1,0 +1,59 @@
+############################################################
+#
+# Harmony Remote Control
+#
+############################################################
+  
+############################################################
+#
+# Start Activity
+#
+############################################################
+
+- alias: Harmony
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: input_select.harmony
+    from: 'Select Input'
+  action:
+  - service: remote.turn_on
+    entity_id: remote.living_room
+    data_template:
+      activity: >
+        {% if is_state("input_select.harmony", "Watch TV") %}
+          26109474
+        {% elif is_state("input_select.harmony", "Watch Plex") %}
+          26117754
+        {% elif is_state("input_select.harmony", "Watch Chromecast") %}
+          26118358
+        {% elif is_state("input_select.harmony", "Play Retropie") %}
+          26286901
+        {% elif is_state("input_select.harmony", "Play Wii U") %}
+          26287096
+        {% else %}
+        {% endif %}
+  - service: input_select.select_option
+    entity_id: input_select.harmony
+    data_template:
+      option: "Select Input"
+  
+############################################################
+#
+# Stop Activity
+#
+############################################################
+
+- alias: Harmony Off
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: input_select.harmony
+    to: 'Power Off'
+  action:
+  - service: remote.turn_off
+    entity_id: remote.living_room
+  - service: input_select.select_option
+    entity_id: input_select.harmony
+    data_template:
+      option: "Select Input"

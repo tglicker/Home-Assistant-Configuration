@@ -1,0 +1,139 @@
+############################################################
+#
+# Fibaro MultiSensor.
+#
+############################################################
+  
+############################################################
+#
+# Motion Sensor Turn on living_room_lamp
+#
+############################################################
+
+- alias: Auto Living Room Lamp
+  trigger:
+  - platform: state
+    entity_id: sensor.fibaro_system_fgms001zw5_motion_sensor_burglar
+    to: '8'
+  condition:
+  - condition: state
+    entity_id: input_boolean.disable_auto_living_room_lamp
+    state: 'off'
+  action:
+  - service: homeassistant.turn_on
+    entity_id: switch.living_room_lamp
+  
+    
+    
+############################################################
+#
+# Notification Actions
+#
+############################################################
+# Start Air Conditioner
+
+- alias: startac push notification action button clicked
+  trigger:
+  - platform: event
+    event_type: html5_notification.clicked
+    event_data:
+      action: startac
+  action:
+  - service: homeassistant.turn_on
+    entity_id: switch.living_room_lamp
+  
+############################################################
+#
+# Current Temperature Notification (Sends a notification and asks about starting the air conditioner)
+#
+############################################################
+
+- alias: Current Temperature Notification
+  trigger:
+  - platform: time
+    at: '17:00'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: input_boolean.disable_current_temperature_notification
+      state: 'off'
+    - condition: numeric_state
+      entity_id: 'sensor.fibaro_system_fgms001zw5_motion_sensor_temperature'
+      above: '23'
+    - condition: state
+      entity_id: device_tracker.androide14fdffea99b53a1
+      state: 'not_home'
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: device_tracker.trent_trent
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.trent_trent
+        state: '!secret work_state'
+  action:
+  - service: notify.html5_trent_galaxys8
+    data_template: 
+      title: "Home Temperature"
+      message: "Home is currently at {{ states.sensor.fibaro_system_fgms001zw5_motion_sensor_temperature.state }} °C."
+      data:
+        actions:
+        - action: open
+          title: Open Home Assistant
+          url: https://ha.stanvx.myds.me
+        - action: startac
+          title: Start AC
+  
+############################################################
+#
+# Burgular Notification (Unexpected motion whilst away)
+#
+############################################################
+
+- alias: Unexpected Motion Notification
+  trigger:
+  - platform: state
+    entity_id: sensor.fibaro_system_fgms001zw5_motion_sensor_burglar
+    to: '8'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: input_boolean.disable_unexpected_motion_notification
+      state: 'off'
+    - condition: state
+      entity_id: device_tracker.androide14fdffea99b53a1
+      state: 'not_home'
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: device_tracker.trent_trent
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.trent_trent
+        state: '!secret work_state'
+  action:
+  - service: notify.html5_trent_galaxys8
+    data_template:
+      message: "Unexpected Motion in Living Room Detected!"
+      
+############################################################
+#
+# Burgular Notification (Tampering)
+#
+############################################################
+
+- alias: Device Tampering Notification
+  trigger:
+  - platform: state
+    entity_id: sensor.fibaro_system_fgms001zw5_motion_sensor_burglar
+    to: '3'
+  condition:
+  - condition: state
+    entity_id: input_boolean.disable_device_tampering_notification
+    state: 'off'
+  action:
+  - service: notify.html5_trent_galaxys8
+    data_template:
+      message: "Tampering of Living Room Sensor Detected!"

@@ -1,0 +1,21 @@
+############################################################
+#
+# Automation ifttt
+#
+############################################################
+  
+############################################################
+#
+# Office Lamp - Device Controll on/off
+#
+############################################################
+
+- alias: Turn Office Lamp on/off
+  trigger:
+  - platform: state
+    entity_id: input_boolean.ifttt_office_lamp
+  action:
+  - service: ifttt.trigger
+    data_template:
+      event: "{% if trigger.to_state.state == 'on' %}officelamp_on{% else %}officelamp_off{% endif %}"
+      value1: "{{ trigger.to_state.state }}"

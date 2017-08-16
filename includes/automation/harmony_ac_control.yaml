@@ -1,0 +1,78 @@
+############################################################
+#
+# Harmony Air Conditioner Control
+#
+############################################################
+  
+############################################################
+#
+# Start Air Conditioner - Cool
+#
+############################################################
+
+- alias: AC Start Cool
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: input_select.ac_operation_mode
+  - platform: state
+    entity_id: input_select.ac_fan_mode
+  - platform: state
+    entity_id: input_select.ac_swing_mode
+  - platform: state
+    entity_id: input_slider.ac_target_temp    
+  condition:
+  - condition: state
+    entity_id: input_select.ac_operation_mode
+    state: 'COOL'
+  action:
+  - service: remote.send_command
+    entity_id: remote.living_room
+    data_template:
+      device: "44392204"      
+      command: "{{ states.sensor.ac_setting_cool.state }}"
+  
+############################################################
+#
+# Start Air Conditioner - Fan
+#
+############################################################
+
+- alias: AC Start Fan
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: input_select.ac_operation_mode
+  - platform: state
+    entity_id: input_select.ac_fan_mode
+  - platform: state
+    entity_id: input_select.ac_swing_mode
+  condition:
+  - condition: state
+    entity_id: input_select.ac_operation_mode
+    state: 'FAN'
+  action:
+  - service: remote.send_command
+    entity_id: remote.living_room
+    data_template:
+      device: "44392204"      
+      command: "{{ states.sensor.ac_setting_fan.state }}"
+  
+############################################################
+#
+# Stop Air Conditioner
+#
+############################################################
+
+- alias: AC Stop
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: input_select.ac_operation_mode
+    to: 'Power Off'
+  action:
+  - service: remote.send_command
+    entity_id: remote.living_room
+    data_template:
+      device: "44392204"
+      command: "PowerOff"

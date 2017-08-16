@@ -1,0 +1,52 @@
+############################################################
+#
+# Milight Control
+#
+############################################################
+
+############################################################
+#
+# MiLight Remote Forwarder
+#
+############################################################
+
+- alias: MiLight Remote Forwarder
+  initial_state: True
+  trigger:
+  - platform: mqtt
+    topic: milight/updates/0x21/rgb_cct/+
+  action:
+  - service: mqtt.publish
+    data_template:
+      topic: "milight/commands/0x11/rgb_cct/{{ trigger.topic.split('/')[4] }}"
+      payload_template: >
+        {{ trigger.payload }}
+        
+
+############################################################
+#
+# Turn on Entryway Light Trent Arrives Home / Turn off after 10 Minutes
+#
+############################################################
+
+- alias: Entryway Light Trent Arrives Home
+  trigger:
+  - entity_id: device_tracker.hauser_trent
+    from: not_home
+    platform: state
+    to: home
+  condition:
+    condition: and
+    conditions:
+    - condition: sun
+      after: sunset
+      after_offset: -0:30:00
+    - condition: state
+      entity_id: input_boolean.disable_entryway_light_trent_home
+      state: 'off'
+  action:
+  - service: light.turn_on
+    entity_id: light.entryway
+  - delay: '00:10:00'
+  - service: light.turn_off
+    entity_id: light.entryway

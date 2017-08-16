@@ -1,0 +1,56 @@
+############################################################
+#
+# Media Light Control
+#
+# Currently just used for testing to make way for bigger and better things in future.
+############################################################
+  
+############################################################
+#
+# Turn off Lamp When Media Playing
+#
+############################################################
+
+- alias: Media player playing
+  trigger:
+  - platform: state
+    entity_id: media_player.tv_ua55ju6400
+    to: 'playing'
+#      from: 'idle'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: input_boolean.disable_media_player_light_control
+      state: 'off'
+  action:
+  - service: homeassistant.turn_off
+    entity_id: switch.living_room_lamp
+  
+############################################################
+#
+# Turn on Lamp When Media Paused / Stopped
+#
+############################################################
+
+- alias: Media player stopped
+  trigger:
+  - platform: state
+    entity_id: media_player.tv_ua55ju6400
+    to: 'paused'
+#    from: 'idle'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: input_boolean.disable_media_player_light_control
+      state: 'off'
+  action:
+  - service: homeassistant.turn_on
+    entity_id: switch.living_room_lamp
