@@ -10,8 +10,8 @@
 * [Fibaro Multisensor](https://www.fibaro.com/en/products/motion-sensor)
 * [Fibaro Relay Switch](https://www.fibaro.com/en/products/switches-2) - Light Switch Control
 * BroadLink SP Mini 3 x4 - Power Socket Control
-* [Milight WiFi Gateway Emulator](https://github.com/sidoh/esp8266_milight_hub) (NodeMCU ESP8266 / NRF24L01+ module) - Allows for controlling an unlimited amount of LimitlessLED Light groups via MQTT
-* [LimitlessLED Full Color and Dual White Downlight](http://www.limitlessled.com/shop/mr16-rgbw-ww-cw-color-and-white-led) - Smart Full Color Downlights
+* [Milight WiFi Gateway Emulator](https://github.com/sidoh/esp8266_milight_hub) (NodeMCU ESP8266 / NRF24L01+ module) - Allows for controlling an unlimited amount of LimitlessLED Light groups via MQTT Protocol
+* [LimitlessLED Full Color and Dual White Downlight](http://www.limitlessled.com/shop/mr16-rgbw-ww-cw-color-and-white-led) - Smart Dimmable Full Color Downlights
 * [LimitlessLED Remote Control](http://www.limitlessled.com/shop/remote-control-for-rgb-ww-cw-color-led-lightbulbs) - Smart Light Remote Control [HASS Integrated](https://github.com/sidoh/esp8266_milight_hub/wiki/Using-Milight-Remote-with-HomeAssistant)
 * [Xiaomi Mijia Smart LED Desk Lamp](http://www.gearbest.com/table-lamps/pp_363779.html)
 * [Google Home](https://madeby.google.com/home) - Voice Assistant/Control
@@ -30,3 +30,5 @@
 ![Other](https://raw.githubusercontent.com/stanvx/Home-Assistant-Configuration/master/screenshots/HA4.PNG)
 #### Night Theme
 ![Night](https://raw.githubusercontent.com/stanvx/Home-Assistant-Configuration/master/screenshots/HANIGHT.PNG)
+#### HA Floorplan
+![HA Floorplan](https://raw.githubusercontent.com/stanvx/Home-Assistant-Configuration/master/screenshots/HAFLOORPLAN.PNG)
