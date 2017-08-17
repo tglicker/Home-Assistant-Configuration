@@ -15,6 +15,9 @@
 - [ ] Setup and wallmount Android Tablet with Dashboard
 - [ ] Update Floorplan with additional functionality
 - [ ] Add Missing AC Split System Controls
+- [ ] Implement TV Time Scene (dim and colour) at Sunset (if home and TV is on)
+- [ ] Implement Guest mode to disable certain interior automations. - Trigger via Google Home + IFTTT 
+- [ ] Implement lights to be turned off if noone is home and no motion detection
 - [ ] Setup Night and Day theme - Also apply to Floorplan
 - [ ] Purchase UPS and implement within HASS
 
