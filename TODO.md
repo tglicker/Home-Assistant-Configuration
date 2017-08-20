@@ -9,6 +9,8 @@
   - [x] Install initial Limitless LED Downlight and test with HASS
   - [ ] Purchase and install additional Limitless LED Downlights and setup in HASS
   - [ ] Setup Milight Party scene.
+- [ ] Setup Motion Controlled Hallway Light
+- [ ] Dim Hallway light in Morning / Night
 - [ ] Investigate, install and configure new Xiaomi Hub and components
   - [ ] Xiaomi Hub
   - [ ] Xiaomi Smart Door Sensors
