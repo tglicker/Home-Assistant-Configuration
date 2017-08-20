@@ -7,6 +7,8 @@
   - [ ] Add new long disance wireless module to ESP8266 Board
   - [ ] Organise a case for the ESP8266 board
   - [x] Install initial Limitless LED Downlight and test with HASS
+  - [ ] Purchase and install additional Limitless LED Downlights and setup in HASS
+  - [ ] Setup Milight Party scene.
 - [ ] Investigate, install and configure new Xiaomi Hub and components
   - [ ] Xiaomi Hub
   - [ ] Xiaomi Smart Door Sensors
